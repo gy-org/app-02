@@ -47,6 +47,7 @@ jobs:
           arn=$(echo $roleinfo | jq -r '.Arn')
           echo $arn
           aws eks create-access-entry --cluster-name ${{ github.event.inputs.clusterName }} --principal-arn $arn --region ${{ github.event.inputs.region }} --type STANDARD --username $arn
+          aws eks associate-access-policy --cluster-name ${{ github.event.inputs.clusterName }} --region ${{ github.event.inputs.region }}  --principal-arn $arn --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
         continue-on-error: true
       
       - name: Deployment app
