@@ -39,9 +39,19 @@ jobs:
       - name: Update kubeconfig
         run: |
           aws eks update-kubeconfig --name ${{ github.event.inputs.clusterName }} --region ${{ github.event.inputs.region }}
+
+     # update the context to the EKS cluster of app
+      - name: Add user to the cluster
+        run: |
+          roleinfo=$(aws sts get-caller-identity)
+          arn=$(echo $output | jq -r '.Arn')
+          echo $arn
+          aws eks create-access-entry --cluster-name ${{ github.event.inputs.clusterName }} --principal-arn $arn -region ${{ github.event.inputs.region }} --type STANDARD --username $arn
+        continue-on-error: true
       
       - name: Deployment app
         run: |
           export IMAGE=${{ github.event.inputs.image }}
           export APP_NAME=${{ github.event.inputs.appName }}
-          envsubst < app/deployment.yaml | kubectl apply -f - 
+          kubectl get pods -A
+      # envsubst < app/deployment.yaml | kubectl apply -f - 
