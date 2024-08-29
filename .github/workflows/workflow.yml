@@ -44,7 +44,7 @@ jobs:
       - name: Add user to the cluster
         run: |
           roleinfo=$(aws sts get-caller-identity)
-          arn=$(echo $output | jq -r '.Arn')
+          arn=$(echo $roleinfo | jq -r '.Arn')
           echo $arn
           aws eks create-access-entry --cluster-name ${{ github.event.inputs.clusterName }} --principal-arn $arn -region ${{ github.event.inputs.region }} --type STANDARD --username $arn
         continue-on-error: true
