@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: app-02
+  annotations:
+    github.com/project-slug: gy-org/app-02
+    backstage.io/kubernetes-label-selector: 'app=app-02'
+  description: app-02 created
+spec:
+  type: service
+  owner: user:guest
+  lifecycle: experimental
